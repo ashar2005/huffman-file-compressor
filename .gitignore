@@ -7,3 +7,6 @@ tests/random.bin
 tests/*.jpg
 tests/*.zip
 tests/*.pdf
+tests/*.jpeg
+tests/headers.txt
+emsdk/
