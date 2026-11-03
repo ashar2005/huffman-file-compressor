@@ -3,3 +3,7 @@
 *.o
 *.huf
 *.out
+tests/random.bin
+tests/*.jpg
+tests/*.zip
+tests/*.pdf
