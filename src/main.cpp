@@ -19,7 +19,9 @@ static void writeFile(const std::string& path, const std::vector<uint8_t>& d) {
 
 int main(int argc, char* argv[]) {
     if (argc < 4) {
-        std::cout << "Usage: huffman compress <input> <output>\n";
+        std::cout << "Usage:\n"
+                  << "  huffman compress <input> <output>\n"
+                  << "  huffman decompress <input> <output>\n";
         return 1;
     }
     try {
@@ -28,11 +30,15 @@ int main(int argc, char* argv[]) {
             auto data = readFile(argv[2]);
             auto packed = compressBytes(data);
             writeFile(argv[3], packed);
-
             std::cout << "Original:   " << data.size()   << " bytes\n";
             std::cout << "Compressed: " << packed.size() << " bytes\n";
             if (!data.empty())
                 std::cout << "Ratio:      " << (100.0 * packed.size() / data.size()) << " %\n";
+        } else if (mode == "decompress") {
+            auto packed = readFile(argv[2]);
+            auto data = decompressBytes(packed);
+            writeFile(argv[3], data);
+            std::cout << "Restored " << data.size() << " bytes\n";
         } else {
             std::cout << "Unknown mode: " << mode << "\n";
             return 1;
