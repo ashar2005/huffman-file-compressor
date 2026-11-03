@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HuffPress – Free lossless file compressor</title>
+<style>
+:root{--red:#e5322d;--red2:#c92722;--bg:#f3f0ee;--card:#fff;--text:#33333b;--mut:#6b6b76;--line:#e3e0dd;--ok:#1e9e5a}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1b1f;--card:#26262b;--text:#ececf0;--mut:#a0a0aa;--line:#3a3a42}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.bar{max-width:1100px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:28px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;cursor:pointer}
+.logo i{width:34px;height:34px;border-radius:9px;background:var(--red);color:#fff;display:grid;place-items:center;font-style:normal}
+.logo b{color:var(--red)}
+nav{display:flex;gap:22px;margin-left:auto}
+nav a{color:var(--text);text-decoration:none;font-weight:600;font-size:.92rem;cursor:pointer}
+nav a:hover{color:var(--red)}
+main{max-width:1100px;margin:0 auto;padding:40px 20px 60px}
+.center{text-align:center}
+h1{font-size:2.3rem;margin:10px 0 8px}
+.sub{color:var(--mut);font-size:1.1rem;max-width:640px;margin:0 auto 34px;line-height:1.5}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;max-width:700px;margin:0 auto}
+.card{background:var(--card);border-radius:14px;padding:26px 22px;text-align:left;cursor:pointer;border:1px solid var(--line);transition:.15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px #0002}
+.card .ic{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;font-size:1.6rem;color:#fff;margin-bottom:14px}
+.card h3{margin:0 0 6px}.card p{margin:0;color:var(--mut);font-size:.92rem;line-height:1.45}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:56px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.step em{font-style:normal;background:var(--red);color:#fff;border-radius:50%;width:28px;height:28px;display:inline-grid;place-items:center;font-weight:700;margin-bottom:8px}
+.step h4{margin:0 0 4px}.step p{margin:0;color:var(--mut);font-size:.9rem;line-height:1.45}
+.drop{background:var(--card);border:2px dashed var(--line);border-radius:16px;padding:60px 20px;max-width:760px;margin:0 auto}
+.drop.over{border-color:var(--red);background:#e5322d12}
+.btn{background:var(--red);color:#fff;border:0;border-radius:10px;padding:16px 44px;font-size:1.15rem;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--red2)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.link{background:none;border:0;color:var(--mut);cursor:pointer;text-decoration:underline;font-size:.9rem;margin-top:14px}
+.hint{color:var(--mut);margin-top:14px;font-size:.92rem}
+.file{display:inline-flex;align-items:center;gap:12px;background:var(--bg);border-radius:10px;padding:12px 18px;margin-bottom:22px;max-width:100%}
+.file span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:420px;font-weight:600}
+.err{color:var(--red);font-weight:600;margin-top:16px;min-height:1.2em}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;max-width:760px;margin:26px auto}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.stat small{color:var(--mut);display:block;margin-bottom:4px}.stat b{font-size:1.35rem}
+.meter{max-width:760px;margin:0 auto 8px;text-align:left}
+.track{height:14px;background:var(--line);border-radius:8px;overflow:hidden}
+.fill{height:100%;background:var(--red);width:0;transition:width .6s}
+.note{max-width:760px;margin:14px auto;background:#f5a62322;border-radius:10px;padding:12px 16px;color:var(--text);font-size:.93rem;line-height:1.45}
+.ok{color:var(--ok)}
+footer{text-align:center;color:var(--mut);font-size:.85rem;padding:24px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div class="logo" onclick="view('home')"><i>⇲</i><span>Huff<b>Press</b></span></div>
+  <nav><a onclick="openTool('c')">Compress</a><a onclick="openTool('d')">Decompress</a><a onclick="view('home');document.getElementById('how').scrollIntoView()">How it works</a></nav>
+</div></header>
+
+<main>
+<section id="v-home" class="view center">
+  <h1>Every file tool, one lossless compressor</h1>
+  <p class="sub">Compress any file with Huffman coding, built from scratch in C++. It runs entirely in your browser, so your files are never uploaded.</p>
+  <div class="cards">
+    <div class="card" onclick="openTool('c')"><div class="ic" style="background:#e5322d">⇲</div><h3>Compress file</h3><p>Shrink any file and download a .huf archive. Verified automatically.</p></div>
+    <div class="card" onclick="openTool('d')"><div class="ic" style="background:#2f7de1">⇱</div><h3>Decompress .huf</h3><p>Restore the exact original file from a .huf archive.</p></div>
+  </div>
+  <div class="steps" id="how" style="text-align:left">
+    <div class="step"><em>1</em><h4>Count</h4><p>Every byte value (0 to 255) is counted, so any file type works.</p></div>
+    <div class="step"><em>2</em><h4>Build the tree</h4><p>A custom min-heap merges the rarest bytes into a Huffman tree. Common bytes get short codes.</p></div>
+    <div class="step"><em>3</em><h4>Pack the bits</h4><p>Canonical codes are packed into bytes with a small header, and checked by decompressing again.</p></div>
+  </div>
+</section>
+
+<section id="v-tool" class="view center" hidden>
+  <h1 id="tTitle"></h1>
+  <p class="sub" id="tSub"></p>
+  <div class="drop" id="drop">
+    <div id="pick">
+      <button class="btn" id="selBtn">Select file</button>
+      <p class="hint">or drop a file here</p>
+    </div>
+    <div id="chosen" hidden>
+      <div class="file"><span id="fName"></span><small id="fSize"></small></div><br>
+      <button class="btn" id="go" disabled>Loading…</button><br>
+      <button class="link" id="change">Choose a different file</button>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+  <input id="file" type="file" hidden>
+</section>
+
+<section id="v-result" class="view center" hidden>
+  <h1 id="rTitle"></h1>
+  <div class="stats" id="stats"></div>
+  <div class="meter" id="meter"><div class="track"><div class="fill" id="fill"></div></div></div>
+  <div class="note" id="note" hidden></div>
+  <p><button class="btn" id="dl">Download</button></p>
+  <button class="link" id="again">Start over</button>
+</section>
+</main>
+<footer>HuffPress · Data Structures project · FAST NUCES Karachi</footer>
+
+<script src="huffman.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let M = null, hcC, hcD, hcR, mode = 'c', file = null, outBytes = null, outName = '';
+
+createHuffman().then(m => {
+  M = m;
+  hcC = M.cwrap('hc_compress', 'number', ['number', 'number']);
+  hcD = M.cwrap('hc_decompress', 'number', ['number', 'number']);
+  hcR = M.cwrap('hc_result', 'number', []);
+  setGo();
+});
+
+function view(n) { document.querySelectorAll('.view').forEach(v => v.hidden = v.id !== 'v-' + n); window.scrollTo(0, 0); }
+function fmt(n) { return n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(2) + ' MB'; }
+function setGo() { $('go').disabled = !M; $('go').textContent = M ? (mode === 'c' ? 'Compress file' : 'Decompress file') : 'Loading…'; }
+
+function openTool(m) {
+  mode = m; file = null;
+  $('tTitle').textContent = m === 'c' ? 'Compress file' : 'Decompress .huf file';
+  $('tSub').textContent = m === 'c' ? 'Select any file. It is compressed on your device and checked before you download it.'
+                                    : 'Select a .huf file made by HuffPress to restore the original.';
+  $('file').accept = m === 'd' ? '.huf' : '';
+  $('pick').hidden = false; $('chosen').hidden = true; $('err').textContent = '';
+  setGo(); view('tool');
+}
+
+function run(fn, bytes) {
+  const p = M._malloc(bytes.length || 1);
+  M.HEAPU8.set(bytes, p);
+  const n = fn(p, bytes.length);
+  M._free(p);
+  if (n < 0) return null;
+  const o = hcR();
+  return M.HEAPU8.slice(o, o + n);
+}
+
+async function pickFile(f) {
+  file = { name: f.name, bytes: new Uint8Array(await f.arrayBuffer()) };
+  $('fName').textContent = f.name; $('fSize').textContent = fmt(file.bytes.length);
+  $('pick').hidden = true; $('chosen').hidden = false; $('err').textContent = '';
+}
+
+function stat(label, value, cls) { return '<div class="stat"><small>' + label + '</small><b class="' + (cls || '') + '">' + value + '</b></div>'; }
+
+function showResult(title, stats, ratio, note) {
+  $('rTitle').textContent = title; $('stats').innerHTML = stats;
+  $('meter').hidden = ratio == null; $('fill').style.width = '0';
+  if (ratio != null) setTimeout(() => $('fill').style.width = Math.min(100, ratio) + '%', 50);
+  $('note').hidden = !note; $('note').textContent = note || '';
+  $('dl').textContent = mode === 'c' ? 'Download .huf file' : 'Download restored file';
+  view('result');
+}
+
+$('go').onclick = () => {
+  $('err').textContent = '';
+  if (mode === 'c') {
+    const packed = run(hcC, file.bytes), back = run(hcD, packed);
+    const ok = back && back.length === file.bytes.length && back.every((v, i) => v === file.bytes[i]);
+    if (!ok) { $('err').textContent = 'Verification failed, so no file was produced.'; return; }
+    outBytes = packed; outName = file.name + '.huf';
+    const o = file.bytes.length, c = packed.length, r = o ? 100 * c / o : 0;
+    showResult('Your file is compressed',
+      stat('Original', fmt(o)) + stat('Compressed', fmt(c)) + stat('Ratio', o ? r.toFixed(1) + ' %' : 'n/a') +
+      stat('Space saved', c < o ? (100 - r).toFixed(1) + ' %' : '0 %') + stat('Round trip', 'Verified ✓', 'ok'),
+      o ? r : null,
+      c >= o ? 'This file did not get smaller. It is probably already compressed (JPG, ZIP, PDF…) or very small, because Huffman coding only exploits uneven byte frequencies and the header adds 268 bytes.' : '');
+  } else {
+    const out = run(hcD, file.bytes);
+    if (!out) { $('err').textContent = 'This is not a valid HuffPress (.huf) file.'; return; }
+    outBytes = out; outName = file.name.replace(/\.huf$/i, '') || 'restored';
+    showResult('Your file is restored', stat('Compressed', fmt(file.bytes.length)) + stat('Restored', fmt(out.length)), null, '');
+  }
+};
+
+$('dl').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([outBytes])); a.download = outName; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$('again').onclick = () => openTool(mode);
+$('selBtn').onclick = $('change').onclick = () => $('file').click();
+$('file').onchange = e => { if (e.target.files[0]) pickFile(e.target.files[0]); e.target.value = ''; };
+$('drop').ondragover = e => { e.preventDefault(); $('drop').classList.add('over'); };
+$('drop').ondragleave = () => $('drop').classList.remove('over');
+$('drop').ondrop = e => { e.preventDefault(); $('drop').classList.remove('over'); if (e.dataTransfer.files[0]) pickFile(e.dataTransfer.files[0]); };
+</script>
+</body>
+</html>
